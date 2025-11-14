@@ -7,6 +7,7 @@ import {
   DocsPage,
   DocsTitle,
 } from 'fumadocs-ui/page';
+import { mdxComponents } from '@/components/mdx';
 
 export default function DocPage({ slugs }: PageProps<'/docs/[...slugs]'>) {
   const page = source.getPage(slugs);
@@ -33,6 +34,7 @@ export default function DocPage({ slugs }: PageProps<'/docs/[...slugs]'>) {
         <MDX
           components={{
             ...defaultMdxComponents,
+            ...mdxComponents,
           }}
         />
       </DocsBody>
