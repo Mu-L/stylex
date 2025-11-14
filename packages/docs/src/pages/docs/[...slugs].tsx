@@ -8,17 +8,16 @@ import {
   DocsTitle,
 } from 'fumadocs-ui/page';
 import { mdxComponents } from '@/components/mdx';
+import * as stylex from '@stylexjs/stylex';
 
 export default function DocPage({ slugs }: PageProps<'/docs/[...slugs]'>) {
   const page = source.getPage(slugs);
 
   if (!page) {
     return (
-      <div className="text-center py-12">
-        <h1 className="text-3xl font-bold mb-4 text-gray-900 dark:text-gray-100">
-          Page Not Found
-        </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+      <div {...stylex.props(styles.fallbackContainer)}>
+        <h1 {...stylex.props(styles.fallbackTitle)}>Page Not Found</h1>
+        <p {...stylex.props(styles.fallbackDescription)}>
           The page you are looking for does not exist.
         </p>
       </div>
@@ -27,8 +26,15 @@ export default function DocPage({ slugs }: PageProps<'/docs/[...slugs]'>) {
 
   const MDX = page.data.body;
   return (
-    <DocsPage toc={page.data.toc}>
-      <DocsTitle>{page.data.title}</DocsTitle>
+    <DocsPage toc={page.data.toc} tableOfContent={{ style: 'clerk' }}>
+      <title>{`${page.data.title} | StyleX`}</title>
+      <DocsTitle>
+        {slugs.length > 1 && slugs[0] === 'api' ? (
+          <code {...stylex.props(styles.codeTitle)}>{page.data.title}</code>
+        ) : (
+          page.data.title
+        )}
+      </DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
         <MDX
@@ -52,3 +58,31 @@ export async function getConfig() {
     staticPaths: pages,
   } as const;
 }
+
+const styles = stylex.create({
+  fallbackContainer: {
+    textAlign: 'center',
+    paddingBlock: '3rem',
+    paddingInline: '1rem',
+  },
+  fallbackTitle: {
+    fontSize: '1.875rem',
+    lineHeight: '2.25rem',
+    fontWeight: 700,
+    marginBlockEnd: '1rem',
+    color: 'var(--color-fd-foreground)',
+  },
+  fallbackDescription: {
+    color: 'var(--color-fd-muted-foreground)',
+  },
+  codeTitle: {
+    fontFamily: 'var(--default-mono-font-family)',
+    padding: 3,
+    borderWidth: 1,
+    borderStyle: 'solid',
+    borderColor: 'var(--color-fd-border)',
+    borderRadius: 5,
+    fontWeight: 400,
+    backgroundColor: 'var(--color-fd-muted)',
+  },
+});
