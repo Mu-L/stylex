@@ -7,7 +7,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import stylex from '@stylexjs/stylex';
+import * as stylex from '@stylexjs/stylex';
 
 const gradientShift = stylex.keyframes({
   '0%': { backgroundPosition: '0% 50%' },
