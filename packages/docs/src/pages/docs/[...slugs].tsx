@@ -6,7 +6,7 @@ import {
   DocsDescription,
   DocsPage,
   DocsTitle,
-} from 'fumadocs-ui/page';
+} from '@/components/layout/page';
 import { mdxComponents } from '@/components/mdx';
 import * as stylex from '@stylexjs/stylex';
 
@@ -26,7 +26,7 @@ export default function DocPage({ slugs }: PageProps<'/docs/[...slugs]'>) {
 
   const MDX = page.data.body;
   return (
-    <DocsPage toc={page.data.toc} tableOfContent={{ style: 'clerk' }}>
+    <DocsPage toc={page.data.toc}>
       <title>{`${page.data.title} | StyleX`}</title>
       <DocsTitle>
         {slugs.length > 1 && slugs[0] === 'api' ? (

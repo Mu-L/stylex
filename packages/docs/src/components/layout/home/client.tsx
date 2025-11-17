@@ -63,7 +63,7 @@ const navbarStyles = stylex.create({
     backdropFilter: 'blur(16px)',
     borderBottomWidth: 1,
     borderBottomStyle: 'solid',
-    borderBottomColor: 'var(--border-fd-border)',
+    borderBottomColor: 'var(--color-fd-border)',
     transitionProperty: 'color, background-color',
   },
   headerWithVals: {
@@ -218,7 +218,7 @@ const navItemStyles = stylex.create({
     borderRadius: '8px',
     borderWidth: 1,
     borderStyle: 'solid',
-    borderColor: 'var(--border-fd-border)',
+    borderColor: 'var(--color-fd-border)',
     backgroundColor: 'var(--bg-fd-muted)',
     padding: 4,
     ['--svg-size' as any]: '4px',
@@ -230,7 +230,7 @@ const navItemStyles = stylex.create({
     borderRadius: '8px',
     borderWidth: 1,
     borderStyle: 'solid',
-    borderColor: 'var(--border-fd-border)',
+    borderColor: 'var(--color-fd-border)',
     backgroundColor: {
       default: 'var(--bg-fd-card)',
       ':hover': 'color-mix(in oklab, var(--bg-fd-accent) 80%, transparent)',

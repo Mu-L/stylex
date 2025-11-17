@@ -7,7 +7,7 @@ import {
   DocsDescription,
   DocsPage,
   DocsTitle,
-} from 'fumadocs-ui/page';
+} from '@/components/layout/page';
 import { baseOptions } from '@/lib/layout.shared';
 import { mdxComponents } from '@/components/mdx';
 import nmnImage from '@/static/img/nmn.jpg';
@@ -42,8 +42,8 @@ export default function BlogPage({ slugs }: PageProps<'/blog/[...slugs]'>) {
     <DocsPage
       {...baseOptions()}
       toc={page.data.toc}
-      tableOfContent={{ style: 'clerk' }}
-      breadcrumb={{ enabled: true }}
+      // tableOfContent={{ style: 'clerk' }}
+      // breadcrumb={{ enabled: true }}
     >
       <title>{`${page.data.title} | StyleX`}</title>
       <DocsTitle>

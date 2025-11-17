@@ -42,3 +42,5 @@ export const legacyColors = stylex.defineVars({
   '--purple-navy': '#575176',
   '--black-coffee': '#363033',
 });
+
+export const activeLinkMarker = stylex.defineMarker();

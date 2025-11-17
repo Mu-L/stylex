@@ -7,26 +7,28 @@ import { useSearchContext } from 'fumadocs-ui/contexts/search';
 import { useSidebar } from 'fumadocs-ui/contexts/sidebar';
 import { usePathname } from 'fumadocs-core/framework';
 import * as stylex from '@stylexjs/stylex';
-import { StyleXComponentProps } from './shared';
+import { BaseLayoutProps, StyleXComponentProps } from './shared';
+import { activeLinkMarker } from '../../theming/vars.stylex';
 
-export interface DocsLayoutProps {
+export interface DocsLayoutProps extends BaseLayoutProps {
   tree: PageTree.Root;
   children: ReactNode;
 }
 
-export function DocsLayout({ tree, children }: DocsLayoutProps) {
+export function DocsLayout({ tree, children, ...props }: DocsLayoutProps) {
   return (
     <TreeContextProvider tree={tree}>
       <header {...stylex.props(layoutStyles.header)}>
         <nav {...stylex.props(layoutStyles.nav)}>
-          <Link href="/" {...stylex.props(layoutStyles.title)}>
-            My Docs
-          </Link>
-
-          <SearchToggle />
           <NavbarSidebarTrigger
             {...stylex.props(layoutStyles.sidebarTrigger)}
           />
+          <Link href="/" {...stylex.props(layoutStyles.title)}>
+            {props.nav?.title ?? 'My Docs'}
+          </Link>
+
+          <div {...stylex.props(layoutStyles.gap)} />
+          <SearchToggle />
         </nav>
       </header>
       <main id="nd-docs-layout" {...stylex.props(layoutStyles.main)}>
@@ -40,10 +42,14 @@ const layoutStyles = stylex.create({
   header: {
     // sticky top-0 bg-fd-background h-14 z-20
     position: 'sticky',
+    display: 'flex',
     top: 0,
     backgroundColor: 'var(--bg-fd-background)',
-    height: 14,
+    height: '56px',
     zIndex: 20,
+    borderBottomWidth: 1,
+    borderBottomStyle: 'solid',
+    borderBottomColor: 'var(--color-fd-border)',
   },
   nav: {
     // flex flex-row items-center gap-2 size-full px-4
@@ -54,21 +60,20 @@ const layoutStyles = stylex.create({
     width: '100%',
     paddingInline: 4 * 4,
   },
-  title: {
-    // font-medium mr-auto
-    fontWeight: 500,
-    marginInlineEnd: 'auto',
+  title: {},
+  gap: {
+    flexGrow: 1,
   },
   sidebarTrigger: {
     // md:hidden
-    display: { default: 'none', '@media (min-width: 768px)': 'block' },
+    // display: { default: 'none', '@media (min-width: 768px)': 'block' },
   },
   main: {
     // flex flex-1 flex-row [--fd-nav-height:56px]
     display: 'flex',
     flexGrow: 1,
     flexDirection: 'row',
-    ['--fd-nav-height' as any]: 56 * 4,
+    ['--fd-nav-height' as any]: '56px',
   },
 });
 
@@ -170,7 +175,7 @@ const sidebarStyles = stylex.create({
     },
   },
   notOpen: {
-    display: { default: 'flex', '@media (max-width: 767px)': 'none' },
+    display: 'none',
   },
 });
 
@@ -190,6 +195,7 @@ function SidebarItem({
         {...stylex.props(
           linkVariants.base,
           pathname === item.url ? linkVariants.active : linkVariants.inactive,
+          pathname === item.url && activeLinkMarker,
         )}
       >
         {item.icon}
@@ -207,29 +213,39 @@ function SidebarItem({
     );
   }
 
+  // type "folder"
   return (
-    <div>
-      {item.index ? (
-        <Link
-          {...stylex.props(
-            linkVariants.base,
-            pathname === item.index.url
-              ? linkVariants.active
-              : linkVariants.inactive,
-          )}
-          href={item.index.url}
-        >
-          {item.index.icon}
-          {item.index.name}
-        </Link>
-      ) : (
-        <p {...stylex.props(linkVariants.base, sidebarItemStyles.textStart)}>
-          {item.icon}
-          {item.name}
-        </p>
-      )}
+    <details {...stylex.props(sidebarItemStyles.details)}>
+      <summary>
+        {item.index ? (
+          <Link
+            {...stylex.props(
+              linkVariants.base,
+              sidebarItemStyles.summaryLink,
+              pathname === item.index.url
+                ? linkVariants.active
+                : linkVariants.inactive,
+            )}
+            href={item.index.url}
+          >
+            {item.index.icon}
+            {item.index.name}
+          </Link>
+        ) : (
+          <p
+            {...stylex.props(
+              linkVariants.base,
+              sidebarItemStyles.summaryLink,
+              sidebarItemStyles.textStart,
+            )}
+          >
+            {item.icon}
+            {item.name}
+          </p>
+        )}
+      </summary>
       <div {...stylex.props(sidebarItemStyles.childContainer)}>{children}</div>
-    </div>
+    </details>
   );
 }
 const sidebarItemStyles = stylex.create({
@@ -239,31 +255,41 @@ const sidebarItemStyles = stylex.create({
     marginTop: { default: 6 * 4, ':first-child': 0 },
     marginBottom: 2 * 4,
   },
+  details: {
+    ['--summary-color' as any]: {
+      default: null,
+      [stylex.when.descendant(':is(*)', activeLinkMarker)]: 'hotpink',
+    },
+  },
+  summaryLink: {
+    color:
+      'var(--summary-color, color-mix(in oklab, var(--text-fd-foreground) 80%, transparent))',
+  },
   textStart: { textAlign: 'start' },
   childContainer: {
     paddingInlineStart: 4 * 4,
     borderInlineStartWidth: 1,
     borderInlineStartStyle: 'solid',
-    borderInlineStartColor: 'var(--border-fd-border)',
+    borderInlineStartColor: 'var(--color-fd-border)',
     display: 'flex',
     flexDirection: 'column',
+    ['--summary-color' as any]: 'initial',
   },
 });
 
 const linkVariants = stylex.create({
   base: {
-    display: 'flex',
+    display: 'inline-flex',
     alignItems: 'center',
     gap: 2 * 4,
-    width: '100%',
+    // width: '100%',
     padding: 1.5 * 4,
     borderRadius: '8px',
     color: 'color-mix(in oklab, var(--text-fd-foreground) 80%, transparent)',
-    ['--svg-size' as any]: '4px',
   },
   active: {
     fontWeight: 500,
-    color: 'var(--text-fd-primary)',
+    color: 'hotpink',
   },
   inactive: {
     color: {

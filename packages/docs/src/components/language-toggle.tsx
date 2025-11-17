@@ -87,7 +87,8 @@ const styles = stylex.create({
   },
   buttonActive: {
     // 'bg-fd-primary/10 font-medium text-fd-primary'
-    backgroundColor: 'var(--bg-fd-primary/10)',
+    backgroundColor:
+      'color-mix(in oklab, var(--bg-fd-primary) 10%, transparent)',
     fontWeight: 500,
     color: 'var(--text-fd-primary)',
   },

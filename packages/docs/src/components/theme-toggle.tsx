@@ -101,7 +101,7 @@ const styles = stylex.create({
     borderRadius: 9999,
     borderWidth: 1,
     borderStyle: 'solid',
-    borderColor: 'var(--border-fd-border)',
+    borderColor: 'var(--color-fd-border)',
     padding: 1 * 4,
   },
   sizeFull: {

@@ -92,7 +92,7 @@ const styles = stylex.create({
     borderRadius: 8,
     borderWidth: 1,
     borderStyle: 'solid',
-    borderColor: 'var(--border-fd-border)',
+    borderColor: 'var(--color-fd-border)',
 
     backgroundColor:
       'color-mix(in oklab, var(--bg-fd-secondary) 50%, transparent)',
@@ -120,7 +120,7 @@ const styles = stylex.create({
     borderRadius: 8,
     borderWidth: 1,
     borderStyle: 'solid',
-    borderColor: 'var(--border-fd-border)',
+    borderColor: 'var(--color-fd-border)',
     backgroundColor: 'var(--bg-fd-background)',
     paddingInline: 1.5 * 4,
   },
